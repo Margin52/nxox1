@@ -1,0 +1,134 @@
+@import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+
+.coverCardList {
+  margin-bottom: -24px;
+
+  .card {
+    :global {
+      .ant-card-meta-title {
+        margin-bottom: 4px;
+        & > a {
+          color: @heading-color;
+          display: inline-block;
+          max-width: 100%;
+        }
+      }
+      .ant-card-meta-description {
+        height: 44px;
+        line-height: 22px;
+        overflow: hidden;
+      }
+    }
+
+    &:hover {
+      :global {
+        .ant-card-meta-title > a {
+          color: @primary-color;
+        }
+      }
+    }
+  }
+
+  .cardItemContent {
+    display: flex;
+    margin-top: 16px;
+    margin-bottom: -4px;
+    line-height: 20px;
+    height: 20px;
+    & > span {
+      color: @text-color-secondary;
+      flex: 1;
+      font-size: 12px;
+    }
+    .avatarList {
+      flex: 0 1 auto;
+    }
+  }
+  .cardList {
+    margin-top: 24px;
+  }
+
+  :global {
+    .ant-list .ant-list-item-content-single {
+      max-width: 100%;
+    }
+  }
+}
+
+.cardTitle{
+  width:100%;
+  height:auto;
+  overflow: hidden;
+ 
+  span{
+    display: block;
+    float:left;
+  }
+  .cardName{
+    float:right;
+    img{
+      width:40px;
+      height:40px;
+      margin-right: 10px;
+    }
+    em{
+      font-style: normal;
+
+    }
+  }
+}
+
+.contentbox{
+  width:100%;
+  height:auto;
+  overflow: hidden;
+  padding:40px 0 60px;
+  h5{
+    text-align: center;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  p{
+    color: rgba(0, 0, 0, 0.45);
+    text-align: left;
+    margin: 0 auto;
+    display: table;
+  }
+  .contentbtn{
+    height: auto;
+    width:100%;
+    overflow: hidden;
+    margin:30px auto 0;
+    text-align: center;
+    .contentbtnons{
+      margin-right: 20px;
+    }
+  }
+}
+
+.cardbottom{
+  width:100%;
+  height:auto;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.imgbox{
+  width:100%;
+  height:auto;
+  overflow: hidden;
+  text-align: center;
+  margin:0 auto;
+  img{
+    text-align: center;
+    width:150px;
+    height:150px;
+  }
+  h5{
+    color:rgba(0, 0, 0, 0.45);
+    text-align: center;
+    margin-top: 15px;
+  }
+}

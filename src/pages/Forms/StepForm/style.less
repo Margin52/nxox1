@@ -1,0 +1,237 @@
+// @import '~antd/lib/style/themes/default.less';
+
+// .stepForm {
+//   margin: 40px auto 0;
+//   max-width: 500px;
+// }
+
+// .stepFormText {
+//   margin-bottom: 24px;
+//   :global {
+//     .ant-form-item-label,
+//     .ant-form-item-control {
+//       line-height: 22px;
+//     }
+//   }
+// }
+
+// .result {
+//   margin: 0 auto;
+//   max-width: 560px;
+//   padding: 24px 0 8px;
+// }
+
+// .desc {
+//   padding: 0 56px;
+//   color: @text-color-secondary;
+//   h3 {
+//     font-size: 16px;
+//     margin: 0 0 12px 0;
+//     color: @text-color-secondary;
+//     line-height: 32px;
+//   }
+//   h4 {
+//     margin: 0 0 4px 0;
+//     color: @text-color-secondary;
+//     font-size: 14px;
+//     line-height: 22px;
+//   }
+//   p {
+//     margin-top: 0;
+//     margin-bottom: 12px;
+//     line-height: 22px;
+//   }
+// }
+
+// @media screen and (max-width: @screen-md) {
+//   .desc {
+//     padding: 0;
+//   }
+// }
+
+// .information {
+//   line-height: 22px;
+//   :global {
+//     .ant-row:not(:last-child) {
+//       margin-bottom: 24px;
+//     }
+//   }
+//   .label {
+//     color: @heading-color;
+//     text-align: right;
+//     padding-right: 8px;
+//     @media screen and (max-width: @screen-sm) {
+//       text-align: left;
+//     }
+//   }
+// }
+
+// .money {
+//   font-family: 'Helvetica Neue', sans-serif;
+//   font-weight: 500;
+//   font-size: 20px;
+//   line-height: 14px;
+// }
+
+// .uppercase {
+//   font-size: 12px;
+// }
+
+
+@import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+
+.detailDescIcon{
+  margin-right: 5px;
+}
+.cardList {
+  margin-bottom: -24px;
+
+  .card {
+    :global {
+      .ant-card-meta-title {
+        margin-bottom: 12px;
+        & > a {
+          color: @heading-color;
+          display: inline-block;
+          max-width: 100%;
+        }
+      }
+      .ant-card-actions {
+        background: #f7f9fa;
+      }
+      .ant-card-body:hover {
+        .ant-card-meta-title > a {
+          color: @primary-color;
+        }
+      }
+    }
+  }
+  .item {
+    height: 64px;
+  }
+  .itemdetail{
+    height: 64px;
+    color:#1890FF;
+  }
+
+  :global {
+    .ant-list .ant-list-item-content-single {
+      max-width: 100%;
+    }
+  }
+}
+
+.extraImg {
+  margin-top: -60px;
+  text-align: center;
+  width: 195px;
+  img {
+    width: 100%;
+  }
+}
+
+.newButton {
+  background-color: #fff;
+  border-color: @border-color-base;
+  border-radius: @border-radius-sm;
+  color: @text-color-secondary;
+  width: 100%;
+  height: 188px;
+}
+
+.cardAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 48px;
+}
+
+.cardDescription {
+  .textOverflowMulti();
+}
+
+.pageHeaderContent {
+  position: relative;
+}
+
+.contentLink {
+  margin-top: 16px;
+  a {
+    margin-right: 32px;
+    img {
+      width: 24px;
+    }
+  }
+  img {
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+}
+
+@media screen and (max-width: @screen-lg) {
+  .contentLink {
+    a {
+      margin-right: 16px;
+    }
+  }
+}
+@media screen and (max-width: @screen-md) {
+  .extraImg {
+    display: none;
+  }
+}
+
+@media screen and (max-width: @screen-sm) {
+  .pageHeaderContent {
+    padding-bottom: 30px;
+  }
+  .contentLink {
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 1000px;
+    a {
+      margin-right: 16px;
+    }
+    img {
+      margin-right: 4px;
+    }
+  }
+}
+.btnPrimary{
+  position: absolute;
+  left:160px;
+  font-size: 12px !important;
+  padding:0 5px !important;
+  height:23px !important;
+  margin-top:-3px;
+  margin-left:5px;
+  letter-spacing:-1px;
+}
+.card_content{
+  span{
+    font-style: normal;
+    color:#fff;
+    // display:inline-block;
+    // padding:0 4%;
+    em{
+      font-style: normal;
+      padding:0 20px 0 0;
+    }
+    i{
+      margin-right: 5px;
+    }
+  }
+  // span em:nth-last-of-type(){
+  //   padding:0 !important;
+  // }
+}
+
+.ant-popover-placement-bottomLeft > .ant-popover-content > .ant-popover-arrow{
+  border-left-color: #333 !important;
+  border-top-color: #333 !important;
+}
+.ant-popover-inner{
+  background-color: #333 !important;
+  color:#fff !important;
+}
