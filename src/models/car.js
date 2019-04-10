@@ -32,6 +32,7 @@ export default {
         *carerweima({ payload, query }, { call, put }){
             const { resolve } = payload;
             const response = yield call(queryErweima, payload.data, query);
+            console.log('让我看看小程序码的接口',response)
             !!resolve && resolve(response); // 返回数据
         },
     },

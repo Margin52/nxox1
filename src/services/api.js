@@ -5,9 +5,71 @@ export async function queryProjectNotice() {
   return request('/api/project/notice');
 }
 
+// 收运列表
 export async function listrecord(params) {
-  return request('/server/api/addon/collection/user/order',{
+  // ?uaid=2&udid=0&act=list${params.name ? `&name=${params.name}` : ''}${params.status ? `&status=${params.status}` : ''}${params.create_date ? `&create_date=${params.create_date}` : ''}
+  return request(`/server/api/addon/collection/user/order`,{
   // return request('/addon/collection/user/order',{
+      method: 'POST',
+      body: params,
+    });
+}
+
+// 收运列表统计
+export async function listRecordSerch(params) {
+  return request(`/server/api/addon/collection/user/order`,{
+  // return request('/addon/collection/user/order',{
+      method: 'POST',
+      body: params,
+    });
+}
+
+
+// 车辆列表
+export async function listcar(params) {
+  console.log('aaaa')
+  return request('/server/api/addon/collection/user/car',{
+  // return request('/addon/collection/user/car',{
+      method: 'POST',
+      body: params,
+    });
+}
+
+// 车辆列表统计
+export async function listcarSer(params) {
+  console.log('aaaa')
+  return request('/server/api/addon/collection/user/car',{
+  // return request('/addon/collection/user/car',{
+      method: 'POST',
+      body: params,
+    });
+}
+
+
+// 车辆小程序码
+export async function listcarCode(params) {
+  console.log('aaaa')
+  // return request('/server/api/addon/collection/user/qrcode?uaid=2&mpid=6&page=pages/main/bind&key=06017',{
+    return request('/server/api/addon/collection/user/qrcode',{
+  // return request('/addon/collection/user/qrcode',{
+      method: 'POST',
+      body: params,
+    });
+}
+
+// 商家列表
+export async function listshop(params) {
+  return request('/server/api/addon/collection/user/shop',{
+  // return request('/addon/collection/user/shop?uaid=2&udid=0&act=list',{
+      method: 'POST',
+      body: params,
+    });
+}
+
+// 商家列表统计
+export async function listshopSer(params) {
+  return request('/server/api/addon/collection/user/shop',{
+  // return request('/addon/collection/user/shop?uaid=2&udid=0&act=list',{
       method: 'POST',
       body: params,
     });

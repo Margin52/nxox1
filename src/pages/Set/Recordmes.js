@@ -294,10 +294,15 @@ class Recordmes extends PureComponent {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
-    sumoff: '', 
-    sumon: '',
-    alltotal:'',
+    // sumoff: '', 
+    // sumon: '',
+    // alltotal:'',
     recordList:[],
+    recordSerList:'',
+    all:'',
+    sumoffs:'',
+    sumons:''
+
   };
 
 
@@ -314,15 +319,41 @@ class Recordmes extends PureComponent {
     dispatch({
       type: 'ruleabc/record',
       payload:{
-        // uaid:Number(localStorage.getItem('uaid')),
         uaid:2,
-        // udid:Number(localStorage.getItem('udid')),
         udid:0,
+        act:'list',
+        // uaid:Number(localStorage.getItem('uaid')),
+        // udid:Number(localStorage.getItem('udid')),
         callback:()=>{
           this.setState({
             recordList : this.props.ruleabc.recordList.data.data,
           })
-          console.log('我是callbackjjjjj',this.props.ruleabc.recordList.data)
+          console.log('我是收运列表',this.props.ruleabc.recordList.data)
+
+        },
+      },
+      
+    });
+
+    dispatch({
+      type: 'ruleabc/recordSer',
+      payload:{
+        uaid:2,
+        udid:0,
+        act:'overview',
+        // uaid:Number(localStorage.getItem('uaid')),
+        // udid:Number(localStorage.getItem('udid')),
+        callback:()=>{
+          this.setState({
+            all:this.props.ruleabc.recordSerList.total
+          })
+          this.setState({
+            sumons:this.props.ruleabc.recordSerList.today_total
+          })
+          this.setState({
+            sumoffs:this.props.ruleabc.recordSerList.total_unfinished
+          })
+          console.log('我是收运列表查询',this.props.ruleabc.recordSerList)
 
         },
       },
@@ -368,8 +399,19 @@ class Recordmes extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'rule/fetch',
-      payload: {},
+      type: 'ruleabc/record',
+      payload:{
+        uaid:2,
+        udid:0,
+        act:'list',
+        callback:()=>{
+          this.setState({
+            recordList : this.props.ruleabc.recordList.data.data,
+          })
+          console.log('我是callbackjjjjj',this.props.ruleabc.recordList.data)
+        },
+      },
+      
     });
   };
 
@@ -432,18 +474,22 @@ class Recordmes extends PureComponent {
       //   payload: values,
       // });
 
+      // 这是搜索的函数
+
       dispatch({
         type: 'ruleabc/record',
         payload:{
           uaid:2,
           udid:0,
+          act:'list',
           name:fieldsValue.name,
-          status:fieldsValue.status,
+          status:parseInt(fieldsValue.status),
+          create_date:fieldsValue.create_date,
           callback:()=>{
             this.setState({
               recordList : this.props.ruleabc.recordList.data.data,
             })
-            console.log('我是callbackjjjjj',this.props.ruleabc.recordList.data)
+            console.log('我是收运列表的查询返回数据',this.props.ruleabc.recordList.data)
   
           },
         },
@@ -506,16 +552,18 @@ class Recordmes extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="规则名称">
+            <FormItem label="发单商家">
               {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="使用状态">
+            <FormItem label="状态">
               {getFieldDecorator('status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
+                  <Option value="0">待接单</Option>
+                  <Option value="1">已接单</Option>
+                  <Option value="2">已完成</Option>
+                  <Option value="-1">商家取消</Option>
                 </Select>
               )}
             </FormItem>
@@ -546,12 +594,12 @@ class Recordmes extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="规则名称">
+            <FormItem label="发单商家">
               {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="使用状态">
+            <FormItem label="状态">
               {getFieldDecorator('status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">关闭</Option>
@@ -561,9 +609,9 @@ class Recordmes extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="更新日期">
+            <FormItem label="注册日期">
               {getFieldDecorator('date')(
-                <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />
+                <DatePicker style={{ width: '100%' }} placeholder="请输入注册日期" />
               )}
             </FormItem>
           </Col>
@@ -593,7 +641,7 @@ class Recordmes extends PureComponent {
   }
 
   render() {
-    const { pageCount,data,sumoff,sumon,alltotal } = this.state;
+    const { pageCount,data, } = this.state;
     // const { pageCount,data,listrecord } = this.state;
 
     const Info = ({ title, value, bordered }) => (
@@ -605,12 +653,10 @@ class Recordmes extends PureComponent {
     );
     const { getFieldDecorator } = this.props.form;
 
-    const all = `${alltotal}个商家`;
-    const sumoffs = `${sumoff}个商家`;
-    const sumons = `${sumon}个商家`
+    
     
     const paginationProps = {
-      pageSize: 12,
+      pageSize: 10,
       showSizeChanger: false,
       total: pageCount,
       onChange: (current, pageSize) => {
@@ -672,19 +718,25 @@ class Recordmes extends PureComponent {
       handleUpdateModalVisible: this.handleUpdateModalVisible,
       handleUpdate: this.handleUpdate,
     };
+
+
+    console.log('zheli',this.state.recordSerList)
+    const all = `${this.state.all}订单`;
+    const sumoffs = `${this.state.sumoffs}订单`;
+    const sumons = `${this.state.sumons}订单`
     return (
       <PageHeaderWrapper  title="查询表格">
         <div className={styles.standardList}>
           <Card bordered={false}>
             <Row>
               <Col sm={8} xs={24}>
-                <Info title="全部商家" value={all} bordered />
+                <Info title="所有订单" value={all} bordered />
               </Col>
               <Col sm={8} xs={24}>
-                <Info title="已审核商家" value={sumoffs} bordered />
+                <Info title="今日订单" value={sumons} bordered />
               </Col>
               <Col sm={8} xs={24}>
-                <Info title="待审核商家" value={sumons} />
+                <Info title="今日未完成" value={sumoffs} />
               </Col>
             </Row>
           </Card>
@@ -723,7 +775,6 @@ class Recordmes extends PureComponent {
               columns={columns} 
               onChange={this.handleStandardTableChange}
             />
-
           </div>
         </Card>
         <CreateForm {...parentMethods} modalVisible={modalVisible} />

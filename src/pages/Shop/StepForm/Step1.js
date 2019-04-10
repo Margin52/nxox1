@@ -1,337 +1,6 @@
-// import React, { PureComponent } from 'react';
-// import moment from 'moment';
-// import router from 'umi/router';
-// import { connect } from 'dva';
-// import {
-//   Button,
-//   Modal,
-//   Form,
-//   DatePicker,
-//   Table,
-//   Row,
-//   Col,
-//   message
-// } from 'antd';
-// import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-// import Result from '@/components/Result';
-// import styles from './style.less';
-
-// const FormItem = Form.Item;
-
-// @connect(({ shop }) => ({
-//   shop,
-
-// }))
-// @Form.create()
-// class BasicList extends PureComponent {
-//   state = { 
-//     visible: false, 
-//     done: false, 
-//     deleteList: false,
-//     data: [],
-//     pageCount: '' 
-//   };
-
-//   formLayout = {
-//     labelCol: { span: 7 },
-//     wrapperCol: { span: 13 },
-//   };
-
-//   componentDidMount() {
-//     const { dispatch } = this.props;
-//     new Promise((resolve) => {
-//       dispatch({
-//         type: 'shop/fetch',
-//         payload: {
-//           resolve,
-//           data: 1,
-//         }
-//       })
-//     }).then((res) => {
-//       if(res.code === 1){
-//         this.setState({
-//           data: res.data.data,
-//           pageCount: res.data.total
-//         })
-//       }else{
-//         message.error(res.msg)
-//       }
-//     })
-//   }
-
-//   handleCancel = () => {
-//     this.setState({
-//       deleteList: false,
-//     });
-//   }
-
-//   handleDone = () => {
-//     setTimeout(() => this.addBtn.blur(), 0);
-//     this.setState({
-//       done: false,
-//       visible: false,
-//     });
-//   };
-
-//   handleSubmit = e => {
-//     e.preventDefault();
-//     const { dispatch, form } = this.props;
-//     const { current } = this.state;
-//     const id = current ? current.id : '';
-//     setTimeout(() => this.addBtn.blur(), 0);
-//     form.validateFields((err, fieldsValue) => {
-//       if (err) return;
-//       this.setState({
-//         done: true,
-//       });
-//       dispatch({
-//         type: 'list/submit',
-//         payload: { id, ...fieldsValue },
-//       });
-//     });
-//   };
-
-//   // 删除店铺
-//   deleteItem = shopId => {
-//     const { dispatch } = this.props;
-//     new Promise((resolve) => {
-//       dispatch({
-//         type: 'shop/delete',
-//         payload: {
-//           resolve,
-//           data: shopId,
-//         }
-//       })
-//     }).then((res) => {
-//       if(res.code === 1){
-//         new Promise((resolve) => {
-//           dispatch({
-//             type: 'shop/fetch',
-//             payload: {
-//               resolve,
-//               data: 1,
-//             }
-//           })
-//         }).then((resd) => {
-//           if(resd.code === 1){
-//             this.setState({
-//               data: resd.data.data,
-//               pageCount: resd.data.count
-//             })
-//           }else{
-//             // message.error(resd.msg)
-//           }
-//         })
-//       }else{
-//         message.error("删除失败")
-//       }
-//     })
-//   };
-
-//   // 分页
-//   pageClick = (pages) => {
-//     const { dispatch } = this.props;
-//     new Promise((resolve) => {
-//       dispatch({
-//         type: 'shop/fetch',
-//         payload: {
-//           resolve,
-//           data: pages,
-//         }
-//       })
-//     }).then((res) => {
-//       if(res.code === 1){
-//         this.setState({
-//           data: res.data.data,
-//           // pageCount: res.count
-//         })
-//       }else{
-//         message.error(res.msg)
-//       }
-//     })
-//   }
-
-//   // 时间戳转日期
-//   timestampToTime = (timestamp) => {
-//     const date = new Date(timestamp * 1000);   
-//     const Y = date.getFullYear() + '-';
-//     const M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-//     const D = (date.getDate() < 10 ? '0'+ date.getDate() : date.getDate()) + ' ';
-//     return Y+M+D;
-//   }
-
-//   render() {
-//     const onValidateForm = () => {
-//       router.push('/dashboard/step-form/confirm');
-//     };
-//     const {
-//       form: { getFieldDecorator },
-//     } = this.props;
-//     const { visible, done, current = {},data,pageCount } = this.state;
-    
-//     const modalFooter = done
-//       ? { footer: null, onCancel: this.handleDone }
-//       : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
-
-//     const editAndDelete = (key) => {
-//       const shopId = key.id;
-//       Modal.confirm({
-//         title: '删除任务',
-//         content: '确定删除该任务吗？',
-//         okText: '确认',
-//         cancelText: '取消',
-//         onOk: () => this.deleteItem(shopId),
-//       });
-//     };
-
-//     // 编辑
-//     const carEdit = (key) => {
-//       const {dispatch} = this.props;
-//       new Promise((resolve) => {
-//         dispatch({
-//           type: 'shopEdit/eidtshop',
-//           payload: {
-//             resolve,
-//             data: key.id,
-//           }
-//         })
-//       }).then((res) => {
-//         if(res.code === 1){
-//           router.push({
-//             pathname:"/dashboard/step-form/confirm",
-//             params: key.id
-//           })
-//         }else{
-//           // message.error(res.msg)
-//         }
-//       })
-//     }
-
-//     const columns = [{
-//       title: '店铺ID',
-//       dataIndex: 'id',
-//     }, {
-//       title: '店铺名称',
-//       dataIndex: 'name',
-//     }, {
-//       title: '店铺电话',
-//       dataIndex: 'phone',
-//     },{
-//       title: '店铺状态',
-//       dataIndex: 'status',
-//       render: (text) => (
-//         <span>
-//           <a style={{color: 'rgba(0,0,0,.65)'}}>
-//             {text == 1 ? "已审" : (text == 2 ? "待审" : "审核失败")}
-//           </a>
-//         </span>
-//       ),
-//     }, {
-//       title: '创建时间',
-//       dataIndex: 'create_time',
-//       // render: (text) => (
-//       //   <span>
-//       //     <a style={{color: 'rgba(0,0,0,.65)'}}>{this.timestampToTime(text)}</a>
-//       //   </span>
-//       // ),
-//     },{
-//       title: '店铺地址',
-//       dataIndex: 'address',
-//     }, {
-//       title: '操作',
-//       dataIndex: 'tip',
-//       render: (text, record) => (
-//         <span>
-//           <a href="#" onClick={()=>carEdit(record)}>编辑</a>
-//           <span className="ant-divider" />
-//           <a type="primary" onClick={()=>editAndDelete(record)}>删除</a>
-//         </span>
-//       ),
-//     }];
-
-
-//     const getModalContent = () => {
-//       if (done) {
-//         return (
-//           <Result
-//             type="success"
-//             title="操作成功"
-//             description="一系列的信息描述，很短同样也可以带标点。"
-//             actions={
-//               <Button type="primary" onClick={this.handleDone}>
-//                 知道了
-//               </Button>
-//             }
-//             className={styles.formResult}
-//           />
-//         );
-//       }
-//       return (
-//         <Form onSubmit={this.handleSubmit}>
-//           <FormItem label="开始时间" {...this.formLayout}>
-//             {getFieldDecorator('createdAt', {
-//               rules: [{ required: true, message: '请选择开始时间' }],
-//               initialValue: current.createdAt ? moment(current.createdAt) : null,
-//             })(
-//               <DatePicker
-//                 showTime
-//                 placeholder="请选择"
-//                 format="YYYY-MM-DD HH:mm:ss"
-//                 style={{ width: '100%' }}
-//               />
-//             )}
-//           </FormItem>
-//         </Form>
-//       );
-//     };
-//     // 分页
-//     const pagination = {
-//       pageSize: 10,
-//       showSizeChanger: false,
-//       total: pageCount,
-//       onChange: (current, pageSize) => {
-//         this.pageClick(current,pageSize);
-//       },
-//     };
-
-//     return (
-//       <PageHeaderWrapper style={{padding:0}}>
-//         <div>
-//           <div className={styles.standardList}>
-//             <div className={styles.shoplistname}>店铺列表</div>
-//             <Button
-//               type="dashed"
-//               style={{ width: '100%', marginBottom: "20px" }}
-//               icon="plus"
-//               onClick={onValidateForm}
-//             >
-//               添加
-//             </Button>
-//             <Table columns={columns} dataSource={data} pagination={pagination} rowKey={record => record.shop_id} />
-//           </div>
-//           <Modal
-//             title={done ? null : `任务${current.id ? '编辑' : '添加'}`}
-//             className={styles.standardListForm}
-//             width={640}
-//             bodyStyle={done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
-//             destroyOnClose
-//             visible={visible}
-//             {...modalFooter}
-//           >
-//             {getModalContent()}
-//           </Modal>
-//         </div>
-//       </PageHeaderWrapper>
-//     );
-//   }
-// }
-
-// export default BasicList;
-
-
-
 import React, { PureComponent } from 'react';
-import router from 'umi/router';
+import { findDOMNode } from 'react-dom';
+import moment from 'moment';
 import { connect } from 'dva';
 import {
   List,
@@ -341,30 +10,44 @@ import {
   Radio,
   Input,
   Progress,
+  Button,
+  Icon,
+  Dropdown,
+  Menu,
   Avatar,
   Modal,
   Form,
-  message,
-  Pagination,
-
+  DatePicker,
+  Select,
 } from 'antd';
 
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import Result from '@/components/Result';
 
 import styles from './Step1.less';
 
+const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-const { Search } = Input;
+const SelectOption = Select.Option;
+const { Search, TextArea } = Input;
 
-@connect(({ list,shop, loading }) => ({
-  list,
+@connect(({ list, loading, shopabcaaa }) => ({
+  shopabcaaa,
   loading: loading.models.list,
-  shop
+  list
 }))
 @Form.create()
-class BasicList extends PureComponent {
-  state = { data: [],pageCount: '',sumoff: '', sumon: '',statusvalue: '',alltotal:'' };
+class ShopOne extends PureComponent {
+  state = { 
+    visible: false,
+    done: false,
+    shopList :'',
+    shopSerList:'',
+    alltotal:'',
+    wait:'',  
+    error:''
+   };
 
   formLayout = {
     labelCol: { span: 7 },
@@ -373,262 +56,139 @@ class BasicList extends PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    new Promise((resolve) => {
-      dispatch({
-        type: 'shop/fetch',
-        payload: {
-          resolve,
-          data: {
-            page: 1
-          },
-        }
-      })
-    }).then((res) => {
-      if(res.code === 1){
-        this.setState({
-          data: res.data.data,
-          pageCount: res.data.total
-        })
-      }
-    })
+    // dispatch({
+    //   type: 'list/fetch',
+    //   payload: {
+    //     count: 5,
+    //   },
+    // });
 
-    
-    new Promise((resolve) => {
-      dispatch({
-        type: 'shop/fetchTotal',
-        payload: {
-          resolve,
-          data: '',
-        }
-      })
-    }).then((res) => {
-      if(res.code === 1){
-        let sum=0;
-        let sum2 = 0;
-        for(var i = 0;i<res.data.data.length;i++){
-          if(res.data.data[i].status === 2){
-            sum += 1
-          } 
-          if(res.data.data[i].status === 1){
-            sum2 += 1
-          }
-        }
+    dispatch({
+      type: 'shopabcaaa/shop',
+      payload:{
+        uaid:2,
+        udid:0,
+        act:'list',
+      },
+      callback:()=>{
         this.setState({
-          sumon: sum,
-          alltotal: res.data.total,
-          sumoff: sum2
+          shopList : this.props.shopabcaaa.shopList.data.data,
         })
-      }
-    })
+        console.log('我是商家列表的数据',this.state.shopList)
+      },
+      
+    });
+
+    dispatch({
+      type: 'shopabcaaa/shopSer',
+      payload:{
+        uaid:2,
+        udid:0,
+        act:'overview',
+      },
+      callback:()=>{
+        this.setState({
+          alltotal : this.props.shopabcaaa.shopSerList.res.total,
+          wait: this.props.shopabcaaa.shopSerList.res.pending,
+          error: this.props.shopabcaaa.shopSerList.res.sleeping,
+        })
+        console.log(this.props)
+        // 你是猪吗 ！！EN！ 啥意思 这个
+        console.log('我是商家列表统计的数据',this.state.shopSerList)
+
+      },
+      
+    });
   }
 
-  // 点击审核进入详情
-  statusClick = (key) => {
-    const {dispatch} = this.props;
-    new Promise((resolve) => {
-      dispatch({
-        type: 'shopEdit/eidtshop',
-        payload: {
-          resolve,
-          data: key,
-        }
-      })
-    }).then((res) => {
-      if(res.code === 1){
-        router.push({
-          pathname:"/shop/step-form/confirm",
-          params: key
-        })
-      }else{
-        // message.error(res.msg)
-      }
-    })
-  }
-
-  // 删除店铺
-  deleteItem = shopId => {
-    const { dispatch } = this.props;
-    new Promise((resolve) => {
-      dispatch({
-        type: 'shop/delete',
-        payload: {
-          resolve,
-          data: shopId,
-        }
-      })
-    }).then((res) => {
-      if(res.code === 1){
-        new Promise((resolve) => {
-          dispatch({
-            type: 'shop/fetch',
-            payload: {
-              resolve,
-              data: {page: 1},
-            }
-          })
-        }).then((resd) => {
-          if(resd.code === 1){
-            this.setState({
-              data: resd.data.data,
-              pageCount: resd.data.count
-            })
-          }else{
-            // message.error(resd.msg)
-          }
-        })
-      }else{
-        message.error("删除失败")
-      }
-    })
+  showModal = () => {
+    this.setState({
+      visible: true,
+      current: undefined,
+    });
   };
 
-  // 搜索
-  searchbox = (value) => {
-    const { dispatch } = this.props;
-    const params = {
-      name: value
-    }
-    new Promise((resolve) => {
-      dispatch({
-        type:'shop/fetch',
-        payload:{
-          resolve,
-          data: params
-        }
-      })
-    }).then((res) => {
-      if(res.code === 1){
-        this.setState({
-          data: res.data.data,
-          pageCount: res.data.total
-        })
-      } else {
-        message.error("未查询到结果")
-          this.setState({
-            data:[],
-            pageCount: ''
-          })
-      }
-    })
-  }
+  showEditModal = item => {
+    this.setState({
+      visible: true,
+      current: item,
+    });
+  };
 
-  searchboxStatus = () => {
-    const { dispatch } = this.props;
-    const params = {
-      status: ""
-    }
-    new Promise((resolve) => {
-      dispatch({
-        type:'shop/fetch',
-        payload:{
-          resolve,
-          data: params
-        }
-      })
-    }).then((res) => {
-      if(res.code === 1){
-        this.setState({
-          data: res.data.data,
-          pageCount: res.data.total
-        })
-      } else {
-        message.error("未查询到结果")
-          this.setState({
-            data:[],
-            pageCount: ''
-          })
-      }
-    })
-  }
+  handleDone = () => {
+    setTimeout(() => this.addBtn.blur(), 0);
+    this.setState({
+      done: false,
+      visible: false,
+    });
+  };
 
-  searchboxStatus1 = () => {
-    const { dispatch } = this.props;
-    const params = {
-      status: 1
-    }
-    new Promise((resolve) => {
-      dispatch({
-        type:'shop/fetch',
-        payload:{
-          resolve,
-          data: params
-        }
-      })
-    }).then((res) => {
-      if(res.code === 1){
-        this.setState({
-          data: res.data.data,
-          pageCount: res.data.total
-        })
-      } else {
-        message.error("未查询到结果")
-          this.setState({
-            data:[],
-            pageCount: ''
-          })
-      }
-    })
-  }
+  handleCancel = () => {
+    setTimeout(() => this.addBtn.blur(), 0);
+    this.setState({
+      visible: false,
+    });
+  };
 
-  searchboxStatus2 = () => {
-    const { dispatch } = this.props;
-    const params = {
-      status: 2
-    }
-    new Promise((resolve) => {
-      dispatch({
-        type:'shop/fetch',
-        payload:{
-          resolve,
-          data: params
-        }
-      })
-    }).then((res) => {
-      if(res.code === 1){
-        this.setState({
-          data: res.data.data,
-          pageCount: res.data.total
-        })
-      } else {
-        message.error("未查询到结果")
-          this.setState({
-            data:[],
-            pageCount: ''
-          })
-      }
-    })
-  }
+  handleSubmit = e => {
+    e.preventDefault();
+    const { dispatch, form } = this.props;
+    const { current } = this.state;
+    const id = current ? current.id : '';
 
-  // 分页
-  pageClick = (pages) => {
-    const { dispatch } = this.props;
-    new Promise((resolve) => {
+    setTimeout(() => this.addBtn.blur(), 0);
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      this.setState({
+        done: true,
+      });
       dispatch({
-        type: 'shop/fetch',
-        payload: {
-          resolve,
-          data: {
-            page: pages
-          },
-        }
-      })
-    }).then((res) => {
-      if(res.code === 1){
-        this.setState({
-          data: res.data.data,
-          // pageCount: res.data.total
-        })
-      }else{
-        // message.error(res.msg)
-      }
-    })
-  }
+        type: 'list/submit',
+        payload: { id, ...fieldsValue },
+      });
+    });
+  };
+
+  deleteItem = id => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'list/submit',
+      payload: { id },
+    });
+  };
 
   render() {
+    const { pageCount,data,alltotal,wait,error } = this.state;
     const {
+      list: { list },
       loading,
     } = this.props;
-    const { pageCount,data,sumoff,sumon,alltotal } = this.state;
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
+    const { visible, done, current = {} } = this.state;
+
+    const editAndDelete = (key, currentItem) => {
+      if (key === 'edit') this.showEditModal(currentItem);
+      else if (key === 'delete') {
+        Modal.confirm({
+          title: '删除任务',
+          content: '确定删除该任务吗？',
+          okText: '确认',
+          cancelText: '取消',
+          onOk: () => this.deleteItem(currentItem.id),
+        });
+      }
+    };
+
+
+    const alltotal1 = `${alltotal}商家`;
+    const wait1 = `${wait}商家`;
+    const error1 = `${error}商家`
+
+    const modalFooter = done
+      ? { footer: null, onCancel: this.handleDone }
+      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
 
     const Info = ({ title, value, bordered }) => (
       <div className={styles.headerInfo}>
@@ -638,73 +198,126 @@ class BasicList extends PureComponent {
       </div>
     );
 
-    const editAndDelete = (key) => {
-      const shopId = key;
-      Modal.confirm({
-        title: '删除任务',
-        content: '确定删除该任务吗？',
-        okText: '确认',
-        cancelText: '取消',
-        onOk: () => this.deleteItem(shopId),
-      });
-    };
-
     const extraContent = (
       <div className={styles.extraContent}>
-        <RadioGroup defaultValue="all" onChange={this.radiochange}>
-          <RadioButton value="all" onClick={this.searchboxStatus}>全部</RadioButton>
-          <RadioButton value="progress" onClick={this.searchboxStatus1}>已审</RadioButton>
-          <RadioButton value="waiting" onClick={this.searchboxStatus2}>待审</RadioButton>
+        <RadioGroup defaultValue="all">
+          <RadioButton value="all">全部</RadioButton>
+          <RadioButton value="progress">进行中</RadioButton>
+          <RadioButton value="waiting">等待中</RadioButton>
         </RadioGroup>
-        <Search className={styles.extraContentSearch} placeholder="请输入商家名称" onSearch={this.searchbox} />
+        <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={() => ({})} />
       </div>
     );
 
+    //  有问题
     const paginationProps = {
-      pageSize: 8,
-      showSizeChanger: false,
-      total: pageCount,
-      onChange: (current, pageSize) => {
-        this.pageClick(current,pageSize);
-      },
+      showSizeChanger: true,
+      showQuickJumper: true,
+      pageSize: 5,
+      total: 50,
     };
 
-    const ListContent = ({ data: { phone,owner, create_time,address,name,agreement,license, status } }) => (
+    const ListContent = ({ data: { owneraaa, createdAt, percent, status,shopList,phone,owner,last_order_time } }) => (
       <div className={styles.listContent}>
         <div className={styles.listContentItem}>
-          <span>{owner}</span>
+          <p>{owner}</p>
           <p>{phone}</p>
         </div>
         <div className={styles.listContentItem}>
-          <span>提交时间</span>
-          <p>{create_time}</p>
+          <span>最近下单</span>
+          <p>{last_order_time ? moment(last_order_time).format('YYYY-MM-DD HH:mm') : ''}</p>
         </div>
         <div className={styles.listContentItem}>
-        {/* <Progress percent={status == 1 ? "100" : (status == 0 ? "0" : (status == 2 && phone !="" && address !='' && name !='' && agreement !='' && license !='' ? "100" : (status == 2 || phone !="" || address !='' || name !='' || agreement !='' || license !=''?'50':'50')))} status={status == 1 ? "active" : (status == 0 ? " " : (status == 2 && phone !="" && address !='' && name !='' && agreement !='' && license !='' ? "exception" : (status == 2 || phone !="" || address !='' || name !='' || agreement !='' || license !=''?'exception':'exception') ))} strokeWidth={6} style={{ width: 180 }} /> */}
-        <Progress percent={status == 1 ? "100" : (status == 0 ? "0" : (status == 2 && phone !="" && address !='' && name !='' && agreement !='' && license !='' ? "100" : (status == 2 || phone !="" || address !='' || name !='' || agreement !='' || license !=''?'50':'50')))} 
-                  strokeColor	={status == 1 ? '#1890ff' : ''}
-                  status={status == 1 ? "success" : (status == 0 ? " " : (status == 2 && phone !="" && address !='' && name !='' && agreement !='' && license !='' ? "exception" : (status == 2 || phone !="" || address !='' || name !='' || agreement !='' || license !=''?'exception':'exception') ))} 
-                  strokeWidth={6}  style={{ width: 180 }} />
+          <p>{status === 0 ? '待审核' : status === 1 ? '已审核' : status === 2 ? '审核中' : status === 3 ? '审核失败' : null}</p>
         </div>
       </div>
     );
 
-   const all = `${alltotal}个商家`;
-   const sumoffs = `${sumoff}个商家`;
-   const sumons = `${sumon}个商家`
+    const MoreBtn = props => (
+      <Dropdown
+        overlay={
+          <Menu onClick={({ key }) => editAndDelete(key, props.current)}>
+            <Menu.Item key="edit">编辑</Menu.Item>
+            <Menu.Item key="delete">删除</Menu.Item>
+          </Menu>
+        }
+      >
+        <a>
+          更多 <Icon type="down" />
+        </a>
+      </Dropdown>
+    );
+
+    const getModalContent = () => {
+      if (done) {
+        return (
+          <Result
+            type="success"
+            title="操作成功"
+            description="一系列的信息描述，很短同样也可以带标点。"
+            actions={
+              <Button type="primary" onClick={this.handleDone}>
+                知道了
+              </Button>
+            }
+            className={styles.formResult}
+          />
+        );
+      }
+      return (
+        <Form onSubmit={this.handleSubmit}>
+          <FormItem label="任务名称" {...this.formLayout}>
+            {getFieldDecorator('title', {
+              rules: [{ required: true, message: '请输入任务名称' }],
+              initialValue: current.title,
+            })(<Input placeholder="请输入" />)}
+          </FormItem>
+          <FormItem label="最近下单" {...this.formLayout}>
+            {getFieldDecorator('createdAt', {
+              rules: [{ required: true, message: '请选择最近下单' }],
+              initialValue: current.createdAt ? moment(current.createdAt) : null,
+            })(
+              <DatePicker
+                showTime
+                placeholder="请选择"
+                format="YYYY-MM-DD HH:mm:ss"
+                style={{ width: '100%' }}
+              />
+            )}
+          </FormItem>
+          <FormItem label="任务负责人" {...this.formLayout}>
+            {getFieldDecorator('owner', {
+              rules: [{ required: true, message: '请选择任务负责人' }],
+              initialValue: current.owner,
+            })(
+              <Select placeholder="请选择">
+                <SelectOption value="付晓晓">付晓晓</SelectOption>
+                <SelectOption value="周毛毛">周毛毛</SelectOption>
+              </Select>
+            )}
+          </FormItem>
+          <FormItem {...this.formLayout} label="产品描述">
+            {getFieldDecorator('subDescription', {
+              rules: [{ message: '请输入至少五个字符的产品描述！', min: 5 }],
+              initialValue: current.subDescription,
+            })(<TextArea rows={4} placeholder="请输入至少五个字符" />)}
+          </FormItem>
+        </Form>
+      );
+    };
     return (
       <PageHeaderWrapper>
         <div className={styles.standardList}>
           <Card bordered={false}>
             <Row>
               <Col sm={8} xs={24}>
-                <Info title="全部商家" value={all} bordered />
+                <Info title="全部商家" value={alltotal1} bordered />
               </Col>
               <Col sm={8} xs={24}>
-                <Info title="已审核商家" value={sumoffs} bordered />
+                <Info title="待审商家" value={wait1} bordered />
               </Col>
               <Col sm={8} xs={24}>
-                <Info title="待审核商家" value={sumons} />
+                <Info title="异常商家" value={error1} />
               </Col>
             </Row>
           </Card>
@@ -712,54 +325,59 @@ class BasicList extends PureComponent {
           <Card
             className={styles.listCard}
             bordered={false}
-            title="商家列表"
+            title="标准列表"
             style={{ marginTop: 24 }}
             bodyStyle={{ padding: '0 32px 40px 32px' }}
             extra={extraContent}
           >
+            
             <List
               size="large"
               rowKey="id"
               loading={loading}
               pagination={paginationProps}
-              dataSource={data}
+              dataSource={this.state.shopList}
+              // dataSource={this.state.shopList}
               renderItem={item => (
                 <List.Item
                   actions={[
                     <a
                       onClick={e => {
                         e.preventDefault();
-                        this.statusClick(item.id);
+                        this.showEditModal(item);
                       }}
                     >
-                      审核
+                      编辑
                     </a>,
-                    <a
-                      onClick={e => {
-                        e.preventDefault();
-                        editAndDelete(item.id)
-                      }}
-                    >
-                      删除
-                    </a>,
+                    <MoreBtn current={item} />,
                   ]}
                 >
                   <List.Item.Meta
-                    avatar={<Avatar src={item.avatar} shape="square" size="large" />}
+                    avatar={<Avatar src={item.logo} shape="square" size="large" />}
                     title={<a href={item.href}>{item.name}</a>}
-                    description={<span>{item.address}{item.house_number}</span>}
+                    description={item.address}
                   />
-                  <ListContent data={item} />
+                  <ListContent data={item} /> 
+                  {/* 这个就是你那个对象 */}
                 </List.Item>
               )}
             />
-            {/* {pageCount}
-            <Pagination total={pageCount} onChange={this.pageClick} style={{float:'right'}} /> */}
           </Card>
         </div>
+        <Modal
+          title={done ? null : `任务${current.id ? '编辑' : '添加'}`}
+          className={styles.standardListForm}
+          width={640}
+          bodyStyle={done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
+          destroyOnClose
+          visible={visible}
+          {...modalFooter}
+        >
+          {getModalContent()}
+        </Modal>
       </PageHeaderWrapper>
     );
   }
 }
 
-export default BasicList;
+export default ShopOne;

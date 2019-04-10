@@ -1,0 +1,224 @@
+@import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+
+.tableList {
+  .tableListOperator {
+    margin-bottom: 16px;
+    button {
+      margin-right: 8px;
+    }
+  }
+}
+.erwimapho{
+  width:200px;
+  height:200px;
+}
+
+.standardList {
+  margin-bottom:24px;
+  :global {
+    .antd-pro-components-page-header-wrapper-grid-content-main{
+      background:#fbfbfb;
+    }
+    .ant-progress-status-success .ant-progress-text{
+      color:#1890ff
+    }
+    .ant-advanced-search-form {
+      padding: 24px;
+      background: #fbfbfb;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+    }
+    
+    .ant-advanced-search-form .ant-form-item {
+      display: flex;
+    }
+    
+    .ant-advanced-search-form .ant-form-item-control-wrapper {
+      flex: 1;
+    }
+  }
+  .headerInfo {
+    position: relative;
+    text-align: center;
+    & > span {
+      color: @text-color-secondary;
+      display: inline-block;
+      font-size: @font-size-base;
+      line-height: 22px;
+      margin-bottom: 4px;
+    }
+    & > p {
+      color: @heading-color;
+      font-size: 24px;
+      line-height: 32px;
+      margin: 0;
+    }
+    & > em {
+      background-color: @border-color-split;
+      position: absolute;
+      height: 56px;
+      width: 1px;
+      top: 0;
+      right: 0;
+    }
+  }
+  
+}
+.tableListForm {
+  :global {
+    .ant-form-item {
+      display: flex;
+      margin-right: 0;
+      margin-bottom: 24px;
+      > .ant-form-item-label {
+        width: auto;
+        padding-right: 8px;
+        line-height: 32px;
+      }
+      .ant-form-item-control {
+        line-height: 32px;
+      }
+    }
+    .ant-form-item-control-wrapper {
+      flex: 1;
+    }
+  }
+  .headerInfo {
+    position: relative;
+    text-align: center;
+    & > span {
+      color: @text-color-secondary;
+      display: inline-block;
+      font-size: @font-size-base;
+      line-height: 22px;
+      margin-bottom: 4px;
+    }
+    & > p {
+      color: @heading-color;
+      font-size: 24px;
+      line-height: 32px;
+      margin: 0;
+    }
+    & > em {
+      background-color: @border-color-split;
+      position: absolute;
+      height: 56px;
+      width: 1px;
+      top: 0;
+      right: 0;
+    }
+  }
+  .submitButtons {
+    display: block;
+    margin-bottom: 24px;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: @screen-lg) {
+  .tableListForm :global(.ant-form-item) {
+    margin-right: 24px;
+  }
+}
+
+@media screen and (max-width: @screen-md) {
+  .tableListForm :global(.ant-form-item) {
+    margin-right: 8px;
+  }
+}
+
+@media screen and (max-width: @screen-xs) {
+  .standardList {
+    :global {
+    }
+    .listContent {
+      margin-left: 0;
+      & > div {
+        margin-left: 0;
+      }
+    }
+    .listCard {
+      :global {
+        .ant-card-head-title {
+          overflow: visible;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: @screen-sm) {
+  .standardList {
+    .extraContentSearch {
+      margin-left: 0;
+      width: 100%;
+    }
+    .headerInfo {
+      margin-bottom: 16px;
+      & > em {
+        display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: @screen-md) {
+  .standardList {
+    .listContent {
+      & > div {
+        display: block;
+      }
+      & > div:last-child {
+        top: 0;
+        width: 100%;
+      }
+    }
+  }
+  .listCard {
+    :global {
+      .ant-radio-group {
+        display: block;
+        margin-bottom: 8px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: @screen-lg) and (min-width: @screen-md) {
+  .standardList {
+    .listContent {
+      & > div {
+        display: block;
+      }
+      & > div:last-child {
+        top: 0;
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: @screen-xl) {
+  .standardList {
+    .listContent {
+      & > div {
+        margin-left: 24px;
+      }
+      & > div:last-child {
+        top: 0;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .standardList {
+    .listContent {
+      text-align: right;
+      & > div:last-child {
+        top: 0;
+      }
+    }
+  }
+}
